@@ -1,0 +1,17 @@
+{
+  "domain": "jl_energy",
+  "name": "JLEnergy",
+  "codeowners": [
+    "@JeziL"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/JeziL/hass-jl-energy",
+  "issue_tracker": "https://github.com/JeziL/hass-jl-energy/issues",
+  "homekit": {},
+  "iot_class": "local_polling",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "0.9"
+}

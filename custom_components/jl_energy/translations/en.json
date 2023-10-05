@@ -1,0 +1,11 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "data_pulling_path": "Data Pulling Path"
+                }
+            }
+        }
+    }
+}
