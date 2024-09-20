@@ -1,3 +1,7 @@
+custom_components/jl_energy/data/node_modules
+custom_components/jl_energy/data/external_api.config.json
+custom_components/jl_energy/data/ExternalDataUpdater.mjs
+
 # General
 .DS_Store
 .AppleDouble
