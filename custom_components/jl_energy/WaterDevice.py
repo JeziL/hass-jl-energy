@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import json
+from datetime import datetime
 from collections import OrderedDict
 
 from homeassistant.components.sensor import (
@@ -66,6 +67,8 @@ class WaterMonthlyUsageSensor(SensorEntity):
     _attr_state_class = SensorStateClass.TOTAL
     _attr_unique_id = "2bbb6483-5c4a-4a76-8bf6-3cc6dd062847"
     _attr_device_info = DEVICE
+    _attr_extra_state_attributes = { "monthly_values": [], "monthly_timestamps": [] }
+    _unrecorded_attributes = frozenset(["monthly_values", "monthly_timestamps"])
 
     def __init__(self, path) -> None:
         self.data_path = path
@@ -73,21 +76,7 @@ class WaterMonthlyUsageSensor(SensorEntity):
     def update(self) -> None:
         with open(os.path.join(self.data_path, "bjwater.data.json"), "r") as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
-            self._attr_native_value = list(data["monthly"].values())[0]["total"]
-
-
-class WaterMonthlyFeeSensor(SensorEntity):
-    _attr_name = "Water monthly fee"
-    _attr_native_unit_of_measurement = "CNY"
-    _attr_device_class = SensorDeviceClass.MONETARY
-    _attr_state_class = SensorStateClass.TOTAL
-    _attr_unique_id = "08a90855-9b9f-48ad-bfc1-c2cf2f72836b"
-    _attr_device_info = DEVICE
-
-    def __init__(self, path) -> None:
-        self.data_path = path
-
-    def update(self) -> None:
-        with open(os.path.join(self.data_path, "bjwater.data.json"), "r") as f:
-            data = json.load(f, object_pairs_hook=OrderedDict)
-            self._attr_native_value = list(data["monthly"].values())[0]["amount"]
+            curr_month = datetime.now().month - 1
+            self._attr_native_value = data["analysis"]["thisYear"][curr_month] if len(data["analysis"]["thisYear"]) > curr_month else 0
+            self._attr_extra_state_attributes["monthly_values"] = data["analysis"]["thisYear"]
+            self._attr_extra_state_attributes["monthly_timestamps"] = [datetime(datetime.now().year, month, 1).timestamp() for month in range(1, 13)]
