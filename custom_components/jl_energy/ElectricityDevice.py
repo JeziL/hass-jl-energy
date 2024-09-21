@@ -1,7 +1,6 @@
 """Sensor entity for the JLEnergy integration."""
 from __future__ import annotations
 import os
-import json
 import sqlite3
 from datetime import datetime
 
@@ -56,8 +55,6 @@ class ElectricityDailyUsageSensor(SensorEntity):
 
     def update(self) -> None:
         self._attr_native_value = 0
-        with open(os.path.join(self.data_path, "external_api.config.json"), "r") as f:
-            data = json.load(f)
-            dates, usages = self.read_daily_usage_from_db(data["sgcc"]["db_path"])
-            self._attr_extra_state_attributes["daily_values"] = usages
-            self._attr_extra_state_attributes["daily_timestamps"] = [int(datetime.strptime(date, '%Y-%m-%d').timestamp()) for date in dates]
+        dates, usages = self.read_daily_usage_from_db(os.path.join(self.data_path, "homeassistant.db"))
+        self._attr_extra_state_attributes["daily_values"] = usages
+        self._attr_extra_state_attributes["daily_timestamps"] = [int(datetime.strptime(date, '%Y-%m-%d').timestamp()) for date in dates]
