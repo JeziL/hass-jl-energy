@@ -7,6 +7,7 @@ from homeassistant.config_entries import ConfigEntry
 
 from .ElectricityDevice import *
 from .WaterDevice import *
+from .GasDevice import *
 from .const import CONF_DATAPATH
 
 
@@ -23,5 +24,12 @@ async def async_setup_entry(
             WaterMonthlyUsageSensor(data_path),
             WaterYearlyUsageSensor(data_path),
             WaterYearlyFeeSensor(data_path),
+            GasAccountBalanceSensor(data_path),
+            GasDailyUsageSensor(data_path),
+            GasLevel1RemainSensor(data_path),
+            GasLevel2RemainSensor(data_path),
+            GasYearlyUsageSensor(data_path),
+            GasValveBinarySensor(data_path),
+            GasValveBatterySensor(data_path)
         ]
     )
