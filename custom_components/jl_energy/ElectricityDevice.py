@@ -43,13 +43,14 @@ class ElectricityDailyUsageSensor(SensorEntity):
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = cursor.fetchall()
         if tables:
-            first_table = tables[0][0]
-            cursor.execute(f"SELECT date, usage FROM {first_table}")
-            rows = cursor.fetchall()
-            dates = [row[0] for row in rows]
-            usages = [row[1] for row in rows]
-            conn.close()
-            return dates, usages
+            for table in tables:
+                if table[0].startswith('daily'):
+                    cursor.execute(f"SELECT date, usage FROM {table[0]}")
+                    rows = cursor.fetchall()
+                    dates = [row[0] for row in rows]
+                    usages = [row[1] for row in rows]
+                    conn.close()
+                    return dates, usages
         conn.close()
         return [], []
 
